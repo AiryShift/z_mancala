@@ -1,4 +1,4 @@
-2048py
+Mancala - Isholo
 ======
 
-A bad python implementation of the popular game 2048
+A version of Mancala taught by a man in Jollyboys Backpackers at the end of 2014
