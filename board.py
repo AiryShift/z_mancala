@@ -1,0 +1,100 @@
+REVERSEMAP = {
+    'a': 0,
+    'b': 1,
+    0: 7,
+    1: 6,
+    2: 5,
+    3: 4,
+    4: 3,
+    5: 2,
+    6: 1,
+    7: 0,
+}
+DIVIDER = '-' * 15
+
+
+class PlayerBoard(object):
+
+    """PlayerBoard is the half of the board that each player controls
+
+    Attributes:
+        board: a dict of the board that the player controls
+            key: (x, y)
+            x: 'a' or 'b', representative of row
+            y: int of 1-8, representative of column
+    """
+
+    def __init__(self):
+        super(PlayerBoard, self).__init__()
+        self.board = {}
+        for x in 'ab':
+            for y in range(1, 9):
+                self.board[x, y] = 2
+
+    def update(self, coordinate, value):
+        self.board[coordinate] = value
+
+    def output(self, flip):
+        # Prints the current boardstate
+        # Has an option for flipping the orientation for recessive player
+        for x in 'ab':
+            output = []
+            for y in range(1, 9):
+                output.append(str(self.board[x, y]))
+
+            if not flip:
+                print(' '.join(output))
+            else:
+                print(' '.join(reversed(output)))
+
+
+class GameBoard(object):
+
+    """Both players' boards in one class
+
+    Attributes:
+        p1: PlayerBoard for player 1
+        p2: PlayerBoard for player 2
+    """
+
+    def __init__(self):
+        super(GameBoard, self).__init__()
+        self.p1 = PlayerBoard()
+        self.p2 = PlayerBoard()
+
+    def getValue(self, player, coordinate):
+        # Returns the stones in a players' specified square
+        if player == 1:
+            return self.p1.board(coordinate)
+        else:
+            return self.p2.board(coordinate)
+
+    def subtract(self, player, coordinate, x):
+        # Removes x stones from a players' square
+        if player == 1:
+            self.p1.update(coordinate, self.p1.board(coordinate) - x)
+        else:
+            self.p2.update(coordinate, self.p2.board(coordinate) - x)
+
+    def pop(self, player, coordinate):
+        # Returns the amount of stones in a players' square
+        # Then removes them all
+        if player == 1:
+            temp = self.p1.board(coordinate)
+            self.p1.update(coordinate, 0)
+            return temp
+        else:
+            temp = self.p2.board(coordinate)
+            self.p2.update(coordinate, 0)
+            return temp
+
+    def output(self, turn):
+        # Output both boards, depending on which player is dominant
+        if turn == 1:
+            self.p2.output(True)
+            print(DIVIDER)
+            self.p1.output(False)
+        else:
+            self.p1.output(True)
+            print(DIVIDER)
+            self.p2.output(False)
