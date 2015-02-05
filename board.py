@@ -1,27 +1,16 @@
-REVERSEMAP = {
-    'a': 0,
-    'b': 1,
-    0: 7,
-    1: 6,
-    2: 5,
-    3: 4,
-    4: 3,
-    5: 2,
-    6: 1,
-    7: 0,
-}
 DIVIDER = '-' * 15
 
 
 class PlayerBoard(object):
 
-    """PlayerBoard is the half of the board that each player controls
+    """PlayerBoard is the half of the board that a player controls
 
     Attributes:
         board: a dict of the board that the player controls
-            key: (x, y)
+            key: tuple(x, y)
             x: 'a' or 'b', representative of row
             y: int of 1-8, representative of column
+            There is no inbuilt error checking: input must be sanitized
     """
 
     def __init__(self):
@@ -88,9 +77,9 @@ class GameBoard(object):
             self.p2.update(coordinate, 0)
             return temp
 
-    def output(self, turn):
-        # Output both boards, depending on which player is dominant
-        if turn == 1:
+    def output(self, player):
+        # Output both boards, depending on which player is currently dominant
+        if player == 1:
             self.p2.output(True)
             print(DIVIDER)
             self.p1.output(False)
@@ -98,3 +87,27 @@ class GameBoard(object):
             self.p1.output(True)
             print(DIVIDER)
             self.p2.output(False)
+
+    def playerCheck(self, player):
+        if player == 1:
+            for i in self.p1.board.items():
+                if i != 0:
+                    break
+            else:
+                return False
+            return 1
+        else:
+            for i in self.p2.board.items():
+                if i != 0:
+                    break
+            else:
+                return False
+            return 2
+
+    def done(self):
+        if self.playerCheck(1):
+            return 1
+        elif self.playerCheck(2):
+            return 2
+        else:
+            return False
