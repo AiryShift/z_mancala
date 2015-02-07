@@ -27,14 +27,12 @@ class PlayerBoard(object):
         # Prints the current boardstate
         # Has an option for flipping the orientation for recessive player
         for x in 'ab':
-            output = []
-            for y in range(1, 9):
-                output.append(str(self.board[x + str(y)]))
+            output = [self.board[x + str(y)] for y in range(1, 9)]
 
             if not flip:
-                print(' '.join(output))
+                print(' '.join([str(i) for i in output]))
             else:
-                print(' '.join(reversed(output)))
+                print(' '.join([str(i) for i in reversed(output)]))
 
 
 class GameBoard(object):
@@ -78,7 +76,7 @@ class GameBoard(object):
             return temp
 
     def output(self, player):
-        # Output both boards, depending on which player is currently dominant
+        # Output a board, depending on which player is specified
         if player == 1:
             self.p2.output(True)
             print(DIVIDER)
