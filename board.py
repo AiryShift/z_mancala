@@ -3,7 +3,7 @@ DIVIDER = '-' * 15
 
 class PlayerBoard(object):
 
-    """PlayerBoard is the half of the board that a player controls
+    """A PlayerBoard is the half of the board that a player controls
 
     Attributes:
         board: a dict of the board that the player controls
@@ -18,7 +18,7 @@ class PlayerBoard(object):
         self.board = {}
         for x in 'ab':
             for y in range(1, 9):
-                self.board[x, y] = 2
+                self.board[x + str(y)] = 2
 
     def update(self, coordinate, value):
         self.board[coordinate] = value
@@ -29,7 +29,7 @@ class PlayerBoard(object):
         for x in 'ab':
             output = []
             for y in range(1, 9):
-                output.append(str(self.board[x, y]))
+                output.append(str(self.board[x + str(y)]))
 
             if not flip:
                 print(' '.join(output))
@@ -54,26 +54,26 @@ class GameBoard(object):
     def getValue(self, player, coordinate):
         # Returns the stones in a players' specified square
         if player == 1:
-            return self.p1.board(coordinate)
+            return self.p1.board[coordinate]
         else:
-            return self.p2.board(coordinate)
+            return self.p2.board[coordinate]
 
     def subtract(self, player, coordinate, x):
         # Removes x stones from a players' square
         if player == 1:
-            self.p1.update(coordinate, self.p1.board(coordinate) - x)
+            self.p1.update(coordinate, self.p1.board[coordinate] - x)
         else:
-            self.p2.update(coordinate, self.p2.board(coordinate) - x)
+            self.p2.update(coordinate, self.p2.board[coordinate] - x)
 
     def pop(self, player, coordinate):
         # Returns the amount of stones in a players' square
         # Then removes them all
         if player == 1:
-            temp = self.p1.board(coordinate)
+            temp = self.p1.board[coordinate]
             self.p1.update(coordinate, 0)
             return temp
         else:
-            temp = self.p2.board(coordinate)
+            temp = self.p2.board[coordinate]
             self.p2.update(coordinate, 0)
             return temp
 
@@ -92,16 +92,12 @@ class GameBoard(object):
         if player == 1:
             for i in self.p1.board.items():
                 if i != 0:
-                    break
-            else:
-                return False
+                    return False
             return 1
         else:
             for i in self.p2.board.items():
                 if i != 0:
-                    break
-            else:
-                return False
+                    return False
             return 2
 
     def done(self):
