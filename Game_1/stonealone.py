@@ -1,105 +1,158 @@
-# Allows board to be imported
-import sys
-sys.path.insert(0, '../')
+REVERSEMAP = {
+    'a': 0,
+    'b': 1,
+    0: 7,
+    1: 6,
+    2: 5,
+    3: 4,
+    4: 3,
+    5: 2,
+    6: 1,
+    7: 0,
+}
+player1 = [[2 for i in range(8)] for i in range(2)]
+player2 = [[2 for i in range(8)] for i in range(2)]
 
-import board
-ASSOCIATIONS = dict(
-    zip(
-        map(str, range(1, 9)), map(str, reversed(range(1, 9)))))
 
-
-def legitimate(move, player):
-    if len(move) != 2:
+def legit(aMove, curBoard):
+    # Determines whether the input is valid
+    if len(aMove) != 2:
         return False
 
-    firstChar, secondChar = move
-
+    firstChar, secondChar = aMove
     if firstChar not in 'ab':
         return False
-
     if not secondChar.isnumeric():
         return False
-
-    if int(secondChar) not in range(1, 9):
+    secondChar = int(secondChar)
+    if secondChar not in set(range(1, 9)):
         return False
-
-    if game.getValue(player, move) == 0:
+    if curBoard[REVERSEMAP[firstChar]][secondChar - 1] == 0:
         return False
     return True
 
 
-def getMove():
-    move = input("Player {name}'s turn. Enter a move: "
-                 .format(name=playerTurn))
-    while not legitimate(move, playerTurn):
-        print('Move was not legitimate.')
-        move = input("Player {name}'s turn. Enter a move: "
-                     .format(name=playerTurn))
+def relativePosition(currentPosition, direction):
+    # Determines the coordinate of a square forwards or backwards of the given
+    answer = []
+    if direction == 'forwards':  # Forwards
+        if currentPosition[0] == 0:
+            if currentPosition[1] == 0:
+                answer.append(1)
+                answer.append(0)
+            else:
+                answer.append(0)
+                answer.append(currentPosition[1] - 1)
+        else:
+            if currentPosition[1] == 7:
+                answer.append(0)
+                answer.append(7)
+            else:
+                answer.append(1)
+                answer.append(currentPosition[1] + 1)
+    else:  # Backwards
+        if currentPosition[0] == 0:
+            if currentPosition[1] == 7:
+                answer.append(1)
+                answer.append(7)
+            else:
+                answer.append(0)
+                answer.append(currentPosition[1] + 1)
+        else:
+            if currentPosition[1] == 0:
+                answer.append(0)
+                answer.append(0)
+            else:
+                answer.append(1)
+                answer.append(currentPosition[1] - 1)
+    return answer
+
+
+def processMove(board, move):
+    # Moves the pieces for a player
+    startX, startY = move
+    hand = board[startX][startY]
+    board[startX][startY] = 0
+    lookingAt = relativePosition(move, 'forwards')
+
+    while hand > 0:
+        board[lookingAt[0]][lookingAt[1]] += 1
+        hand -= 1
+        lookingAt = relativePosition(lookingAt, 'forwards')
+
+    lookingAt = relativePosition(lookingAt, 'backwards')
+    if board[lookingAt[0]][lookingAt[1]] != 1:
+        board, lookingAt = processMove(board, lookingAt)
+
+    return board, lookingAt
+
+
+def getMove(aPlayer):
+    # Gets input from the user for a move
+    move = input('Move: ')
+    while not legit(move, aPlayer):
+        print('Illegal move.')
+        move = input('Move: ')
     print()
+
+    # Parses the move
+    move = list(move)
+    move[0] = REVERSEMAP[move[0]]
+    move[1] = int(move[1]) - 1
     return move
 
 
-def nextPos(coordinate):
-    firstChar, secondChar = coordinate
-    if firstChar == 'a':
-        if secondChar == '1':
-            firstChar, secondChar = 'b', '1'
-        else:
-            secondChar = str(int(secondChar) - 1)
-    else:  # firstChar == 'b'
-        if secondChar == '8':
-            firstChar, secondChar = 'a', '8'
-        else:
-            secondChar = str(int(secondChar) + 1)
-    return firstChar + secondChar
+def makeMove(movingPlayer, opponent):
+    # Handles moking stones and stone capture
+
+    # Mokes the pieces for the moving Player
+    movingPlayer, lastSpot = processMove(movingPlayer, getMove(movingPlayer))
+    if lastSpot[0] == 0:  # If the last stone is dropped in the inner row
+        # Remove the opponent's adjacent stones
+        opponentsColumn = REVERSEMAP[lastSpot[1]]
+        opponent[0][opponentsColumn] = 0
+        opponent[1][opponentsColumn] = 0
+
+    return movingPlayer, opponent
 
 
-def nextTurn(curTurn):
-    if curTurn == 1:
-        return 2
+def printBoard(printingFor):
+    # Outputs the board in a formatted form
+    top, bottom = player1, player2
+    if printingFor == 1:
+        top, bottom = bottom, top
+
+    print("Player {playerNum}'s turn.".format(playerNum=printingFor))
+    for i in reversed(top):
+        print(' '.join([str(a) for a in reversed(i)]))
+    print('-' * 15)
+    for i in bottom:
+        print(' '.join([str(a) for a in i]))
+
+
+def notDone(aPlayer):
+    # Determines whether any player's win condition has been met.
+    for i in aPlayer:
+        for j in i:
+            if j != 0:
+                return True
+    return False
+
+
+currentMove = 1
+printBoard(currentMove)
+
+while notDone(player1) and notDone(player2):
+    if currentMove == 1:
+        player1, player2 = makeMove(player1, player2)
+        currentMove = 2
     else:
-        return 1
+        player2, player1 = makeMove(player2, player1)
+        currentMove = 1
 
+    printBoard(currentMove)
 
-def captureStones(move):
-    firstChar, secondChar = move
-    if firstChar == 'a':
-        y = ASSOCIATIONS[secondChar]
-        opponentCoords = [x + y for x in 'ab']
-
-        if int(opponentCoords[0][1]) > 0:  # If opponent's 'a' row has a stone
-            for coordinate in opponentCoords:
-                game.pop(nextTurn(playerTurn), coordinate)
-
-
-def makeMove(move):
-    hand = game.pop(playerTurn, move)
-
-    while hand > 0:
-        move = nextPos(move)
-        game.increment(playerTurn, move, 1)
-        hand -= 1
-
-    if game.getValue(playerTurn, move) != 1:
-        makeMove(move)
-    else:
-        captureStones(move)
-
-
-game = board.GameBoard()
-turnNumber = 1
-playerTurn = 1
-
-while not game.done():
-    print('Turn {num}'
-          .format(num=turnNumber))
-    game.output(playerTurn)
-
-    move = getMove()
-    makeMove(move)
-
-    turnNumber += 1
-    playerTurn = nextTurn(playerTurn)
-
-print('Player {playerName} wins!'
-      .format(playerName=game.done()))
+if notDone(player1):
+    print('Player 1 wins!')
+else:
+    print('Player 2 wins!')
