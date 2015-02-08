@@ -56,22 +56,22 @@ class GameBoard(object):
         else:
             return self.p2.board[coordinate]
 
-    def subtract(self, player, coordinate, x):
+    def increment(self, player, coordinate, x):
         # Removes x stones from a players' square
         if player == 1:
-            self.p1.update(coordinate, self.p1.board[coordinate] - x)
+            self.p1.update(coordinate, self.getValue(1, coordinate) + x)
         else:
-            self.p2.update(coordinate, self.p2.board[coordinate] - x)
+            self.p2.update(coordinate, self.getValue(2, coordinate) + x)
 
     def pop(self, player, coordinate):
         # Returns the amount of stones in a players' square
         # Then removes them all
         if player == 1:
-            temp = self.p1.board[coordinate]
+            temp = self.getValue(1, coordinate)
             self.p1.update(coordinate, 0)
             return temp
         else:
-            temp = self.p2.board[coordinate]
+            temp = self.getValue(2, coordinate)
             self.p2.update(coordinate, 0)
             return temp
 
