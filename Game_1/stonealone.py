@@ -32,39 +32,23 @@ def legit(aMove, curBoard):
     return True
 
 
-def relativePosition(currentPosition, direction):
+def nextPosition(currentPosition):
     # Determines the coordinate of a square forwards or backwards of the given
     answer = []
-    if direction == 'forwards':  # Forwards
-        if currentPosition[0] == 0:
-            if currentPosition[1] == 0:
-                answer.append(1)
-                answer.append(0)
-            else:
-                answer.append(0)
-                answer.append(currentPosition[1] - 1)
+    if currentPosition[0] == 0:
+        if currentPosition[1] == 0:
+            answer.append(1)
+            answer.append(0)
         else:
-            if currentPosition[1] == 7:
-                answer.append(0)
-                answer.append(7)
-            else:
-                answer.append(1)
-                answer.append(currentPosition[1] + 1)
-    else:  # Backwards
-        if currentPosition[0] == 0:
-            if currentPosition[1] == 7:
-                answer.append(1)
-                answer.append(7)
-            else:
-                answer.append(0)
-                answer.append(currentPosition[1] + 1)
+            answer.append(0)
+            answer.append(currentPosition[1] - 1)
+    else:
+        if currentPosition[1] == 7:
+            answer.append(0)
+            answer.append(7)
         else:
-            if currentPosition[1] == 0:
-                answer.append(0)
-                answer.append(0)
-            else:
-                answer.append(1)
-                answer.append(currentPosition[1] - 1)
+            answer.append(1)
+            answer.append(currentPosition[1] + 1)
     return answer
 
 
@@ -73,14 +57,13 @@ def processMove(board, move):
     startX, startY = move
     hand = board[startX][startY]
     board[startX][startY] = 0
-    lookingAt = relativePosition(move, 'forwards')
+    lookingAt = [startX, startY]
 
     while hand > 0:
+        lookingAt = nextPosition(lookingAt)
         board[lookingAt[0]][lookingAt[1]] += 1
         hand -= 1
-        lookingAt = relativePosition(lookingAt, 'forwards')
 
-    lookingAt = relativePosition(lookingAt, 'backwards')
     if board[lookingAt[0]][lookingAt[1]] != 1:
         board, lookingAt = processMove(board, lookingAt)
 
