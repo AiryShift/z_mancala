@@ -3,7 +3,8 @@ DIVIDER = '-' * 15
 
 class PlayerBoard(object):
 
-    """A PlayerBoard is the half of the board that a player controls
+    """
+    A PlayerBoard is the half of the board that a player controls
 
     Attributes:
         board: a dict of the board that the player controls
@@ -37,14 +38,13 @@ class PlayerBoard(object):
             if not flip:
                 print(' '.join([str(i) for i in output]))
             else:
-                print(' '.join(
-                    reversed(
-                        [str(i) for i in reversed(output)])))
+                print(' '.join([str(i) for i in reversed(output)]))
 
 
 class GameBoard(object):
 
-    """Both players' boards in one class
+    """
+    Both players' boards in one class
 
     Attributes:
         p1: PlayerBoard for player 1
@@ -93,7 +93,7 @@ class GameBoard(object):
             print(DIVIDER)
             self.p2.output(False)
 
-    def playerCheck(self, player):
+    def _playerCheck(self, player):
         if player == 1:
             for i in self.p1.board.items():
                 if i != 0:
@@ -106,9 +106,9 @@ class GameBoard(object):
             return 2
 
     def done(self):
-        if self.playerCheck(1):
+        if self._playerCheck(1):
             return 1
-        elif self.playerCheck(2):
+        elif self._playerCheck(2):
             return 2
         else:
             return False
