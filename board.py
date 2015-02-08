@@ -26,13 +26,20 @@ class PlayerBoard(object):
     def output(self, flip):
         # Prints the current boardstate
         # Has an option for flipping the orientation for recessive player
-        for x in 'ab':
-            output = [self.board[x + str(y)] for y in range(1, 9)]
+        if not flip:
+            ordering = 'ab'
+        else:
+            ordering = 'ba'
+
+        for row in ordering:
+            output = [self.board[row + str(col)] for col in range(1, 9)]
 
             if not flip:
                 print(' '.join([str(i) for i in output]))
             else:
-                print(' '.join([str(i) for i in reversed(output)]))
+                print(' '.join(
+                    reversed(
+                        [str(i) for i in reversed(output)])))
 
 
 class GameBoard(object):
