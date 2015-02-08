@@ -10,25 +10,34 @@ According to an extremely verbose storyteller, Mancala (or Isholo as he called i
 At this point there are three variations that I will try to construct here. As all three are variations on each other, they have common rules. 
 
 The Board
+
 The board or table consists of four rows of eight holes. Two rows are allocated to each player. In each of the holes two stones are placed. The innermost row, and thus the row that is positioned closest to the opposing player, will be thus referred to in the coordinate system as 'a'. The outer row will be therefore referred to as 'b'. When considering the board for the opposing player, one's board undergoes something resembling rotational symmetry, such that the ordering of rows is:
 b
 a
 a
 b
 Irrespective of player perspective. Each of the holes is referred to with a number from 1-8, in accordance with the eight holes in each row. Thus for any given player, their board will be referred to as:
+
 a1 a2 a3 a4 a5 a6 a7 a8
 b1 b2 b3 b4 b5 b6 b7 b8
+
 In respect to the aforementioned rotational symmetry, the opponent's corresponding positions to the player will appear as
+
 b8 b7 b6 b5 b4 b3 b2 b1
 a8 a7 a6 a5 a4 a3 a2 a1
+
 Giving a comprehensive board of appearance:
+
 b8 b7 b6 b5 b4 b3 b2 b1
 a8 a7 a6 a5 a4 a3 a2 a1
----------------
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
 a1 a2 a3 a4 a5 a6 a7 a8
 b1 b2 b3 b4 b5 b6 b7 b8
 
 Sowing
+
 The second concept common to all three variations is the concept of sowing. Sowing occurs once on each player's turn. 
 
 Sowing utilizes a directional system best explained with "anticlockwise". When the words "one hole forwards" or a similar variation is used, it refers to one hole anticlockwise. Thus in the a row, a8 moves to a7, a3 moves to a2, and a1 moves to b1. Following this, b1 would move to b2, b5 would move to b6, and b8 would move to a8.  
@@ -42,6 +51,7 @@ b. However, if the final hole had previous stones, then they are all picked up a
 These two processes are all that is common between the three variations. Let us move on...
 
 Game 1
+
 This game is the most basic of the three. Every turn, each player sows a single hole. However, if the sowing process stops in the 'a' row, then a list of conditional checks happen. If the opponent has > 0 stones in their 'a' hole directly adjacent to the final sowed hole, then all stones in that column are captured and removed from the game.
 The list of directly adjacent column coordinates:
 
@@ -59,9 +69,11 @@ Stones are captured if and only if the opponent has stones in their 'a' row. The
 The objective is to remove all of your opponents stones.
 
 Game 2
+
 In this game the first half of the move resembles Game 1. Each player sows a square, and pieces are captured on the basis of the same conditions. However,  the captured pieces are not removed, but are transferred to the moving player's hand. From there, the moving player's hand will move backwards (clockwise motion, opposite to the direction of normal play) until they encounter an empty hole. From this there are two variations, both of which hinge on an edge case:
 
 a. All of the captured stones are placed in this empty hole, and the player is forced to begin the sowing process from that hole.
+
 b. The hand moves forwards (anticlockwise, standard play direction) one hole and begins dropping stones from their hand, as if they had sowed from the empty hole. However, an important distinction is that the hand does not interact with the empty hole.
 
 These variations exist because there are occasions where there are no empty holes. The player is then forced to continue either of the above processes (although the variations must be kept consistent across a game) from the hole with the most stones, and, when there is a tie, they are allowed to choose which hole they sow from.
@@ -69,6 +81,7 @@ These variations exist because there are occasions where there are no empty hole
 Again, the objective is to remove all of your opponent's stones.
 
 Game 3
+
 This game is unusual in that I'm not sure if it is possible to win. This game's rules takes from the first more than the second. Again, each player begins be sowing their stones, and, like in the first game, the stones are captured if they are in the 'a' row. However, instead of removing the stones or transferring them to your board, the captured stones are redistributed in any formation along the opponent's board. 
 
 This sounds unusual until you realize the objective: to force the entirety of the opponent's 32 stones into two piles. 
