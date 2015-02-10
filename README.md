@@ -3,7 +3,10 @@ Mancala - Isholo
 
 A version of Mancala taught by a man in Jollyboys Backpackers at the end of 2014.
 
-The stonealone files should run on their own without any other files. Not exactly in the full OOP philosophy though, so there will probably only be one..
+The stonealone files should run on their own without any other files. Not exactly in the full OOP philosophy though, so there will probably only be one...
+
+To run the game in its current state, download the entire repository and, using Python 3, run either the stonealone file or stones inside each game folder.
+======
 
 According to an extremely verbose storyteller, Mancala (or Isholo as he called it) is an ancient game played with stones, and has had great significance in shaping the past of Zambia, in that it has not had a single civil war. While the truth of this can be debated, the existence of the game cannot. 
 
