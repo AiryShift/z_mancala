@@ -5,7 +5,8 @@ sys.path.insert(0, '../')
 import board
 ASSOCIATIONS = dict(
     zip(
-        map(str, range(1, 9)), map(str, reversed(range(1, 9)))))
+        map(str, range(1, 9)),
+        map(str, reversed(range(1, 9)))))
 
 
 def legitimate(move, player):

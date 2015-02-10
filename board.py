@@ -21,8 +21,8 @@ class PlayerBoard(object):
             for y in range(1, 9):
                 self.board[x + str(y)] = 2
 
-    def update(self, coordinate, value):
-        self.board[coordinate] = value
+    def update(self, coord, value):
+        self.board[coord] = value
 
     def output(self, flip):
         # Prints the current boardstate
@@ -56,30 +56,30 @@ class GameBoard(object):
         self.p1 = PlayerBoard()
         self.p2 = PlayerBoard()
 
-    def getValue(self, player, coordinate):
+    def getValue(self, player, coord):
         # Returns the stones in a players' specified square
         if player == 1:
-            return self.p1.board[coordinate]
+            return self.p1.board[coord]
         else:
-            return self.p2.board[coordinate]
+            return self.p2.board[coord]
 
-    def increment(self, player, coordinate, x):
+    def increment(self, player, coord, x):
         # Removes x stones from a players' square
         if player == 1:
-            self.p1.update(coordinate, self.getValue(1, coordinate) + x)
+            self.p1.update(coord, self.getValue(1, coord) + x)
         else:
-            self.p2.update(coordinate, self.getValue(2, coordinate) + x)
+            self.p2.update(coord, self.getValue(2, coord) + x)
 
-    def pop(self, player, coordinate):
+    def pop(self, player, coord):
         # Returns the amount of stones in a players' square
         # Then removes them all
         if player == 1:
-            temp = self.getValue(1, coordinate)
-            self.p1.update(coordinate, 0)
+            temp = self.getValue(1, coord)
+            self.p1.update(coord, 0)
             return temp
         else:
-            temp = self.getValue(2, coordinate)
-            self.p2.update(coordinate, 0)
+            temp = self.getValue(2, coord)
+            self.p2.update(coord, 0)
             return temp
 
     def output(self, player):
