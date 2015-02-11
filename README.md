@@ -15,28 +15,37 @@ At this point there are three variations that I will try to construct here. As a
 The Board
 
 The board or table consists of four rows of eight holes. Two rows are allocated to each player. In each of the holes two stones are placed. The innermost row, and thus the row that is positioned closest to the opposing player, will be thus referred to in the coordinate system as 'a'. The outer row will be therefore referred to as 'b'. When considering the board for the opposing player, one's board undergoes something resembling rotational symmetry, such that the ordering of rows is:
+
 b
+
 a
+
 a
+
 b
+
 Irrespective of player perspective. Each of the holes is referred to with a number from 1-8, in accordance with the eight holes in each row. Thus for any given player, their board will be referred to as:
 
 a1 a2 a3 a4 a5 a6 a7 a8
+
 b1 b2 b3 b4 b5 b6 b7 b8
 
 In respect to the aforementioned rotational symmetry, the opponent's corresponding positions to the player will appear as
 
 b8 b7 b6 b5 b4 b3 b2 b1
+
 a8 a7 a6 a5 a4 a3 a2 a1
 
 Giving a comprehensive board of appearance:
 
 b8 b7 b6 b5 b4 b3 b2 b1
+
 a8 a7 a6 a5 a4 a3 a2 a1
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
 
 a1 a2 a3 a4 a5 a6 a7 a8
+
 b1 b2 b3 b4 b5 b6 b7 b8
 
 Sowing
