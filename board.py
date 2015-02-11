@@ -60,14 +60,32 @@ class GameBoard(object):
         # Returns the stones in a players' specified square
         if player == 1:
             return self.p1.board[coord]
-        else:
+        else:  # player == 2
             return self.p2.board[coord]
+
+    def values(self, player):
+        if player == 1:
+            return self.p1.values()
+        else:  # player == 2
+            return self.p2.values()
+
+    def index(self, player, stones):
+        if player == 1:
+            for k, v in self.p1.items():
+                if v == stones:
+                    return k
+            return 0
+        else:
+            for k, v in self.p2.items():
+                if v == stones:
+                    return k
+            return 0
 
     def increment(self, player, coord, x):
         # Removes x stones from a players' square
         if player == 1:
             self.p1.update(coord, self.getValue(1, coord) + x)
-        else:
+        else:  # player == 2
             self.p2.update(coord, self.getValue(2, coord) + x)
 
     def pop(self, player, coord):
@@ -77,7 +95,7 @@ class GameBoard(object):
             temp = self.getValue(1, coord)
             self.p1.update(coord, 0)
             return temp
-        else:
+        else:  # player == 2
             temp = self.getValue(2, coord)
             self.p2.update(coord, 0)
             return temp
@@ -88,7 +106,7 @@ class GameBoard(object):
             self.p2.output(True)
             print(DIVIDER)
             self.p1.output(False)
-        else:
+        else:  # player == 2
             self.p1.output(True)
             print(DIVIDER)
             self.p2.output(False)
@@ -99,7 +117,7 @@ class GameBoard(object):
                 if i != 0:
                     return False
             return 1
-        else:
+        else:  # player == 2
             for i in self.p2.board.items():
                 if i != 0:
                     return False
