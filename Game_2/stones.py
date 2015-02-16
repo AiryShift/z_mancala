@@ -4,16 +4,14 @@ sys.path.insert(0, '../')
 import board
 from collections import Counter
 
-ASSOCIATIONS = dict(
-    zip(
-        map(str, range(1, 9)),
-        map(str, reversed(range(1, 9)))))
+ASSOCIATIONS = {str(k): str(v) for k, v in
+                zip(range(1, 9), reversed(range(1, 9)))}
 
 STANDARD_ORDER = []
 for y in reversed(range(1, 9)):
     STANDARD_ORDER.append('a' + str(y))
 for y in range(1, 9):
-    STANDARD_ORDER.append('a' + str(y))
+    STANDARD_ORDER.append('b' + str(y))
 
 
 def nextTurn(curTurn):
@@ -26,21 +24,16 @@ def nextTurn(curTurn):
 def legitimate(move, player, checks=None):
     if len(move) != 2:
         return False
-
     firstChar, secondChar = move
 
     if firstChar not in 'ab':
         return False
-
     if not secondChar.isnumeric():
         return False
-
     if int(secondChar) not in range(1, 9):
         return False
-
     if game.getValue(player, move) == 0:
         return False
-
     if checks:
         if move not in checks:
             return False
