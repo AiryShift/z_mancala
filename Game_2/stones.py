@@ -1,7 +1,6 @@
 # Allows board to be imported
 import sys
 sys.path.insert(0, '../')
-
 import board
 from collections import Counter
 
@@ -9,10 +8,22 @@ ASSOCIATIONS = dict(
     zip(
         map(str, range(1, 9)),
         map(str, reversed(range(1, 9)))))
-ORDER = ['a' + str(y) for y in reversed(range(1, 9))] + ['b' + str(y) for y in range(1, 9)]
+
+STANDARD_ORDER = []
+for y in reversed(range(1, 9)):
+    STANDARD_ORDER.append('a' + str(y))
+for y in range(1, 9):
+    STANDARD_ORDER.append('a' + str(y))
 
 
-def legitimate(move, player):
+def nextTurn(curTurn):
+    if curTurn == 1:
+        return 2
+    else:
+        return 1
+
+
+def legitimate(move, player, checks=None):
     if len(move) != 2:
         return False
 
@@ -29,27 +40,22 @@ def legitimate(move, player):
 
     if game.getValue(player, move) == 0:
         return False
+
+    if checks:
+        if move not in checks:
+            return False
     return True
 
 
-def getMove(moveType):
-    if moveType == 1:  # Standard movetype, get player move.
+def getMove(checks=None):
+    move = input("Player {name}, enter a move: "
+                 .format(name=playerTurn))
+    while not legitimate(move, playerTurn, checks):
+        print('Move was not legitimate.')
         move = input("Player {name}'s turn. Enter a move: "
                      .format(name=playerTurn))
-        while not legitimate(move, playerTurn):
-            print('Move was not legitimate.')
-            move = input("Player {name}'s turn. Enter a move: "
-                         .format(name=playerTurn))
-        print()
-        return move
-    else:  # moveType == 2
-        move = input("Player {name}, choose a square: "
-                     .format(name=playerTurn))
-        while not legitimate(move, playerTurn):
-            move = input("Player {name}, choose a square: "
-                         .format(name=playerTurn))
-        print()
-        return move
+    print()
+    return move
 
 
 def nextPos(coord):
@@ -67,16 +73,9 @@ def nextPos(coord):
     return firstChar + secondChar
 
 
-def nextTurn(curTurn):
-    if curTurn == 1:
-        return 2
-    else:
-        return 1
-
-
-def captureAndSow(coord, opponentStones):
-    location = ORDER.index(coord)
-    for i in ORDER[location:] + ORDER[:location]:
+def resow(coord, opponentStones):
+    location = STANDARD_ORDER.index(coord)
+    for i in STANDARD_ORDER[location:] + STANDARD_ORDER[:location]:
         if game.getValue(playerTurn, i) == 0:  # Looking for empty hole
             emptyHole = i
             break
@@ -85,7 +84,7 @@ def captureAndSow(coord, opponentStones):
 
         if Counter(game.values(playerTurn))[highestValue] > 1:  # Choose one
             choices = []
-            for i in ORDER:
+            for i in STANDARD_ORDER:
                 if game.getValue(playerTurn, i) == highestValue:
                     choices.append(i)
 
@@ -93,7 +92,7 @@ def captureAndSow(coord, opponentStones):
             for i in choices:
                 print(i)
 
-            makeMove(move=getMove(2), hand=opponentStones)
+            makeMove(move=getMove(), hand=opponentStones)
             return
         else:  # Resow from the highestValue
             makeMove(move=game.index(highestValue), hand=opponentStones)
@@ -112,7 +111,7 @@ def captureStones(move):
             opponentStones = 0
             for coord in opponentCoords:
                 opponentStones += game.pop(nextTurn(playerTurn), coord)
-            captureAndSow(move, opponentStones)
+            resow(move, opponentStones)
 
 
 def makeMove(move, hand=0):
@@ -139,7 +138,7 @@ while not game.done():
           .format(num=turnNumber))
     game.output(playerTurn)
 
-    move = getMove(1)
+    move = getMove()
     makeMove(move)
 
     turnNumber += 1

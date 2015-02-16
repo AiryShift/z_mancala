@@ -1,0 +1,7 @@
+Current sequence exceeds recursion depth:
+a8
+a8
+a8
+a7
+a8
+a6
