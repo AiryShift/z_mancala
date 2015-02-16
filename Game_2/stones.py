@@ -2,6 +2,7 @@
 import sys
 sys.path.insert(0, '../')
 import board
+import re
 from collections import Counter
 
 ASSOCIATIONS = {str(k): str(v) for k, v in
@@ -22,17 +23,7 @@ def nextTurn(curTurn):
 
 
 def legitimate(move, player, checks=None):
-    if len(move) != 2:
-        return False
-    firstChar, secondChar = move
-
-    if firstChar not in 'ab':
-        return False
-    if not secondChar.isnumeric():
-        return False
-    if int(secondChar) not in range(1, 9):
-        return False
-    if game.getValue(player, move) == 0:
+    if not re.match(r'^[ab][1-9]$', move):
         return False
     if checks:
         if move not in checks:
@@ -72,7 +63,7 @@ def resow(coord, opponentStones):
         if game.getValue(playerTurn, i) == 0:  # Looking for empty hole
             emptyHole = i
             break
-    else:  # No empty hole
+    else:  # Nobreak: no empty hole
         highestValue = max(game.values(playerTurn))
 
         if Counter(game.values(playerTurn))[highestValue] > 1:  # Choose one
@@ -131,8 +122,7 @@ while not game.done():
           .format(num=turnNumber))
     game.output(playerTurn)
 
-    move = getMove()
-    makeMove(move)
+    makeMove(getMove())
 
     turnNumber += 1
     playerTurn = nextTurn(playerTurn)
