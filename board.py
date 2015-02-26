@@ -1,4 +1,6 @@
 DIVIDER = '-' * 15
+ORDER = [[x + str(y) for y in range(1, 9)] for x in 'ab']
+REVERSE_ORDER = [[x + str(y) for y in reversed(range(1, 9))] for x in 'ba']
 
 
 class PlayerBoard(object):
@@ -8,10 +10,9 @@ class PlayerBoard(object):
 
     Attributes:
         board: a dict of the board that the player controls
-            key: tuple(x, y)
-            x: 'a' or 'b', representative of row
-            y: int of 1-8, representative of column
-            There is no inbuilt error checking: input must be sanitized
+            key: str(x) + str(y)
+                x: 'a' or 'b', representative of row
+                y: int of 1-8, representative of column
     """
 
     def __init__(self):
@@ -26,19 +27,13 @@ class PlayerBoard(object):
 
     def output(self, flip):
         # Prints the current boardstate
-        # Has an option for flipping the orientation for recessive player
+        # Has an option for flipping the orientation for non-dominant player
         if not flip:
-            ordering = 'ab'
+            for row in ORDER:
+                print(' '.join([str(self.board[i]) for i in row]))
         else:
-            ordering = 'ba'
-
-        for row in ordering:
-            output = [self.board[row + str(col)] for col in range(1, 9)]
-
-            if not flip:
-                print(' '.join([str(i) for i in output]))
-            else:
-                print(' '.join([str(i) for i in reversed(output)]))
+            for row in REVERSE_ORDER:
+                print(' '.join([str(self.board[i]) for i in row]))
 
 
 class GameBoard(object):
@@ -75,7 +70,7 @@ class GameBoard(object):
                 if v == stones:
                     return k
             return 0
-        else:
+        else:  # player == 2
             for k, v in self.p2.items():
                 if v == stones:
                     return k
