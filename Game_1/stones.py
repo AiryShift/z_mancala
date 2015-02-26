@@ -1,7 +1,7 @@
 # Allows board to be imported
 import sys
 sys.path.insert(0, '../')
-
+import re
 import board
 ASSOCIATIONS = dict(
     zip(
@@ -10,20 +10,8 @@ ASSOCIATIONS = dict(
 
 
 def legitimate(move, player):
-    if len(move) != 2:
+    if not re.match(r'^[ab][1-9]$', move):
         return False
-
-    firstChar, secondChar = move
-
-    if firstChar not in 'ab':
-        return False
-
-    if not secondChar.isnumeric():
-        return False
-
-    if int(secondChar) not in range(1, 9):
-        return False
-
     if game.getValue(player, move) == 0:
         return False
     return True
